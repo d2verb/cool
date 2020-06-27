@@ -1,4 +1,4 @@
-from ctftools.crypto.number import btoi, egcd, itob, modinv
+from ctftools.crypto.number import btoi, egcd, fermat_test, itob, modinv
 
 
 def test_egcd():
@@ -25,3 +25,24 @@ def test_itob():
     b = b"this is secret!"
     i = 604424160775843504266020346055193633
     assert itob(i) == b
+
+
+def test_fermat_test():
+    test_cases = [
+        (1, False),
+        (2, True),
+        (3, True),
+        (11, True),
+        (31, True),
+        (40, False),
+        (41, True),
+        (42, False),
+        (43, True),
+        (47, True),
+        (311, True),
+        (313, True),
+        (314, False),
+    ]
+
+    for n, judge in test_cases:
+        assert fermat_test(n) == judge

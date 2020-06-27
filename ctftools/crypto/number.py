@@ -1,3 +1,5 @@
+from math import gcd
+from random import randint
 from typing import Tuple
 
 from Crypto.Util.number import bytes_to_long, long_to_bytes
@@ -25,3 +27,19 @@ def btoi(b: bytes) -> int:
 
 def itob(i: int) -> bytes:
     return long_to_bytes(i)
+
+
+def fermat_test(n: int) -> int:
+    if n in [1, 2]:
+        return [False, True][n - 1]
+
+    for k in range(100):
+        a = randint(2, n - 1)
+
+        if gcd(n, a) != 1:
+            return False
+
+        if pow(a, n - 1, n) != 1:
+            return False
+
+    return True
