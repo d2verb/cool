@@ -1,3 +1,5 @@
+from random import randint
+
 from ctftools.crypto.number import (
     btoi,
     egcd,
@@ -5,6 +7,7 @@ from ctftools.crypto.number import (
     itob,
     miller_rabin_test,
     modinv,
+    prime_factorization,
 )
 
 
@@ -74,3 +77,16 @@ def test_miller_rabin_test():
 
     for n, judge in test_cases:
         assert miller_rabin_test(n) == judge
+
+
+def test_prime_factorization():
+    for _ in range(5):
+        n = randint(1, int(1e15))
+        factors = prime_factorization(n)
+
+        _n = 1
+        for p, q in factors.items():
+            assert miller_rabin_test(p)
+            _n *= pow(p, q)
+
+        assert _n == n
