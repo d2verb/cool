@@ -1,8 +1,12 @@
+import logging
+from collections import defaultdict
 from math import gcd
 from random import randint
-from typing import Tuple
+from typing import DefaultDict, Optional, Tuple
 
 from Crypto.Util.number import bytes_to_long, long_to_bytes
+
+logger = logging.getLogger(__name__)
 
 
 def egcd(a: int, b: int) -> Tuple[int, int, int]:
@@ -67,3 +71,50 @@ def miller_rabin_test(n: int, k: int = 30) -> bool:
             return False
 
     return True
+
+
+def pollard_rho(n: int, seed: int = 3) -> Optional[int]:
+    def f(x):
+        return seed * x + 1
+
+    x, y, d = 2, 2, 1
+
+    while d == 1:
+        x = f(x) % n
+        y = f(f(y)) % n
+        d = gcd(abs(x - y), n)
+
+    if d != n:
+        return d
+
+    return None
+
+
+def prime_factorization(n: int) -> DefaultDict[int, int]:
+    factors: DefaultDict[int, int] = defaultdict(lambda: 0)
+
+    logger.debug(f"start prime factorizing {n} ...")
+    while n != 1:
+        if miller_rabin_test(n):
+            factors[n] += 1
+            logger.debug(f"found prime factor: {n}")
+            n //= n
+        else:
+            for seed in [3, 5, 7, 11, 13, 17]:
+                f = pollard_rho(n, seed=seed)
+                if f is not None:
+                    break
+            else:
+                raise Exception(f"can't find factor of {n}")
+
+            if miller_rabin_test(f):
+                factors[f] += 1
+                logger.debug(f"found prime factor: {f}")
+            else:
+                f_factors = prime_factorization(f)
+                for p, q in f_factors.items():
+                    factors[p] += q
+
+            n //= f
+
+    return factors
