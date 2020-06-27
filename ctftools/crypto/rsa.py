@@ -3,6 +3,8 @@ from typing import Optional, Tuple
 from Crypto.PublicKey import RSA
 from gmpy2 import iroot
 
+from ctftools.crypto.number import egcd
+
 
 def export_key(n: int, e: int, d: Optional[int] = None) -> bytes:
     if d is not None:
@@ -26,3 +28,10 @@ def import_key(
 def low_public_exponent_attack(c: int, e: int) -> Optional[int]:
     m, result = iroot(c, e)
     return m if result else None
+
+
+def common_modulus_attack(c1: int, e1: int, c2: int, e2: int, n: int) -> int:
+    g, x, y = egcd(e1, e2)
+    c1 = pow(c1, x, n)
+    c2 = pow(c2, y, n)
+    return (c1 * c2) % n
