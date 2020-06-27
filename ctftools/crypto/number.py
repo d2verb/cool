@@ -43,3 +43,27 @@ def fermat_test(n: int, k: int = 100) -> int:
             return False
 
     return True
+
+
+def miller_rabin_test(n: int, k: int = 30) -> int:
+    if n in [1, 2]:
+        return [False, True][n - 1]
+
+    s, d = 0, n - 1
+
+    while d % 2 == 0:
+        s += 1
+        d //= 2
+
+    for _ in range(k):
+        a = randint(2, n - 1)
+        x = pow(a, d, n)
+
+        for r in range(s):
+            if x == n - 1 or x == 1:
+                break
+            x = (x * x) % n
+        else:
+            return False
+
+    return True
