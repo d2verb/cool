@@ -1,6 +1,7 @@
 from typing import Optional, Tuple
 
 from Crypto.PublicKey import RSA
+from gmpy2 import iroot
 
 
 def export_key(n: int, e: int, d: Optional[int] = None) -> bytes:
@@ -20,3 +21,8 @@ def import_key(
         return key.n, key.e, key.d
     else:
         return key.n, key.e, None
+
+
+def low_public_exponent_attack(c: int, e: int) -> Optional[int]:
+    m, result = iroot(c, e)
+    return m if result else None
