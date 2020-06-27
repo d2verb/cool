@@ -20,6 +20,7 @@ jobs:
           curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3.8
       - name: Install project dependencies
         run: |
+          source $HOME/.poetry/env
           poetry install
       - name: Run pytest
         run: |
