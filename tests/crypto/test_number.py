@@ -1,4 +1,4 @@
-from ctftools.crypto.number import egcd, modinv
+from ctftools.crypto.number import btoi, egcd, itob, modinv
 
 
 def test_egcd():
@@ -13,3 +13,15 @@ def test_modinv():
     for a, m in test_cases:
         b = modinv(a, m)
         assert (a * b) % m == 1
+
+
+def test_btoi():
+    b = b"this is secret!"
+    i = 604424160775843504266020346055193633
+    assert btoi(b) == i
+
+
+def test_itob():
+    b = b"this is secret!"
+    i = 604424160775843504266020346055193633
+    assert itob(i) == b

@@ -1,5 +1,7 @@
 from typing import Tuple
 
+from Crypto.Util.number import bytes_to_long, long_to_bytes
+
 
 def egcd(a: int, b: int) -> Tuple[int, int, int]:
     if a == 0:
@@ -15,3 +17,11 @@ def modinv(a: int, m: int) -> int:
         raise Exception("modular inverse does not exist")
     else:
         return x % m
+
+
+def btoi(b: bytes) -> int:
+    return bytes_to_long(b)
+
+
+def itob(i: int) -> bytes:
+    return long_to_bytes(i)
