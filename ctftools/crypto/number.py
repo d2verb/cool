@@ -29,11 +29,11 @@ def itob(i: int) -> bytes:
     return long_to_bytes(i)
 
 
-def fermat_test(n: int) -> int:
+def fermat_test(n: int, k: int = 100) -> int:
     if n in [1, 2]:
         return [False, True][n - 1]
 
-    for k in range(100):
+    for _ in range(k):
         a = randint(2, n - 1)
 
         if gcd(n, a) != 1:
