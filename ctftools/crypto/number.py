@@ -29,7 +29,7 @@ def itob(i: int) -> bytes:
     return long_to_bytes(i)
 
 
-def fermat_test(n: int, k: int = 100) -> int:
+def fermat_test(n: int, k: int = 100) -> bool:
     if n in [1, 2]:
         return [False, True][n - 1]
 
@@ -45,7 +45,7 @@ def fermat_test(n: int, k: int = 100) -> int:
     return True
 
 
-def miller_rabin_test(n: int, k: int = 30) -> int:
+def miller_rabin_test(n: int, k: int = 30) -> bool:
     if n in [1, 2]:
         return [False, True][n - 1]
 
