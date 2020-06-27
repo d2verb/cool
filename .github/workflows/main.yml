@@ -16,7 +16,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgmp-dev libmpfr-dev libmpc-dev python-dev libgmp3-dev
-          sudo apt-get install -y python3.8
+          sudo apt-get install -y python3.8 python3.8-venv
           curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3.8
       - name: Install project dependencies
         run: |
