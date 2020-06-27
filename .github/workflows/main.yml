@@ -14,7 +14,7 @@ on:
 jobs:
   pytest:
     name: pytest
-    runs-on: ubuntu-last
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Install system dependencies
