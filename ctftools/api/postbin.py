@@ -26,12 +26,16 @@ class PostBinRequest:
     inserted: int
 
 
-class PostBin:
+class PostBinApi:
     """
     This is a static class for accessing the PostBin API.
     """
 
     API_BASE: str = "https://postb.in/api/"
+
+    @classmethod
+    def url(cls, binid: str) -> str:
+        return f"https://postb.in/{binid}"
 
     @classmethod
     def create(cls) -> str:
@@ -63,7 +67,6 @@ class PostBin:
         Fetch a request arrived at the bin with the given binid.
 
         :calls: `GET /bin/:binid/req/shift`
-        :return PostBinReceivedRequest: The request information sent to the bin with the given binid.
         """
         status, data = cls.__api(f"bin/{binid}/req/shift", requests.get)
 
