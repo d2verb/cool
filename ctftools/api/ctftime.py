@@ -24,7 +24,7 @@ class CTFEvent:
     format: str
 
 
-class CTFtime:
+class CTFtimeApi:
     """
     This is a static class for accessing the CTFTime API.
     """
@@ -77,7 +77,12 @@ class CTFtime:
         """
         url = urljoin(cls.API_BASE, path)
 
-        ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+        # fake user agent
+        ua = (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+        )
+
         kwargs["headers"] = {"User-Agent": ua}
 
         response = method(url, **kwargs)
