@@ -1,40 +1,22 @@
-from typing import Callable, NamedTuple
+import dataclasses
+from typing import Callable, Tuple
 from urllib.parse import urljoin
 
 import requests
 
-
-class PostBinApiException(Exception):
-    def __init__(self, status, data):
-        super().__init__()
-        self.__status = status
-        self.__data = data
-
-    @property
-    def status(self):
-        return self.__status
-
-    @property
-    def data(self):
-        return self.__data
-
-    def __str__(self):
-        return f"{self.status} {self.data}"
+from ctftools.api.common import ApiException
 
 
-class PostBinRequestNotFound(Exception):
+class PostBinRequestNotFoundError(ApiException):
     pass
 
 
-class PostBinRequestFetchingFailed(Exception):
+class PostBinFatalError(ApiException):
     pass
 
 
-class PostBinCreationFailed(Exception):
-    pass
-
-
-class PostBinReceivedRequest(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class PostBinRequest:
     method: str
     path: str
     headers: dict
@@ -49,10 +31,10 @@ class PostBin:
     This is a static class for accessing the PostBin API.
     """
 
-    API_BASE = "https://postb.in/api/"
+    API_BASE: str = "https://postb.in/api/"
 
     @classmethod
-    def create_bin(cls):
+    def create(cls) -> str:
         """
         Create a new bin.
 
@@ -62,12 +44,12 @@ class PostBin:
         status, data = cls.__api("bin", requests.post)
 
         if status != 201:
-            raise PostBinCreationFailed(status, data["msg"])
+            raise PostBinFatalError(status, data["msg"])
 
         return data["binId"]
 
     @classmethod
-    def delete_bin(cls, binid: str):
+    def delete(cls, binid: str) -> None:
         """
         Delete the bin with the given binid.
 
@@ -76,7 +58,7 @@ class PostBin:
         cls.__api(f"bin/{binid}", requests.delete)
 
     @classmethod
-    def fetch_request(cls, binid: str):
+    def shift_request(cls, binid: str) -> PostBinRequest:
         """
         Fetch a request arrived at the bin with the given binid.
 
@@ -86,7 +68,7 @@ class PostBin:
         status, data = cls.__api(f"bin/{binid}/req/shift", requests.get)
 
         if status == 200:
-            return PostBinReceivedRequest(
+            return PostBinRequest(
                 method=data["method"],
                 path=data["path"],
                 headers=data["headers"],
@@ -97,12 +79,12 @@ class PostBin:
             )
 
         if status == 404 and data["msg"] == "No requests in this bin":
-            raise PostBinRequestNotFound(status, data["msg"])
+            raise PostBinRequestNotFoundError(status, data["msg"])
         else:
-            raise PostBinRequestFetchingFailed(status, data["msg"])
+            raise PostBinFatalError(status, data["msg"])
 
     @classmethod
-    def __api(cls, path: str, method: Callable, **kwargs):
+    def __api(cls, path: str, method: Callable, **kwargs) -> Tuple[int, dict]:
         """
         The basic function for calling PostBin API.
         """
