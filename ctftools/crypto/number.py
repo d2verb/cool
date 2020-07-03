@@ -1,6 +1,6 @@
 import logging
 from collections import defaultdict
-from math import gcd
+from math import ceil, gcd, sqrt
 from random import randint
 from typing import DefaultDict, Optional, Tuple
 
@@ -118,3 +118,30 @@ def prime_factorization(n: int) -> DefaultDict[int, int]:
             n //= f
 
     return factors
+
+
+def baby_step_giant_step(x: int, y: int, m: int) -> Optional[int]:
+    """
+    find a integer k that satisfy x^k = y (mod m)
+    """
+    sm = int(ceil(sqrt(m)))
+    exponent_of = {1: 0}
+
+    # Baby-step
+    z = 1
+    for i in range(sm):
+        z = z * x % m
+        exponent_of[z] = i + 1
+
+    if y in exponent_of:
+        return exponent_of[y]
+
+    # Giant-step
+    r = pow(modinv(x, m), sm, m)  # r = x^-sm % P
+    g = y
+    for i in range(sm):
+        if g in exponent_of:
+            return exponent_of[g] + i * sm
+        g = g * r % m
+
+    return None

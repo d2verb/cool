@@ -1,13 +1,14 @@
 from random import randint
 
 from ctftools.crypto.number import (
+    baby_step_giant_step,
     btoi,
     egcd,
     fermat_test,
     itob,
     miller_rabin_test,
     modinv,
-    prime_factorization,
+    prime_factorization
 )
 
 
@@ -90,3 +91,15 @@ def test_prime_factorization():
             _n *= pow(p, q)
 
         assert _n == n
+
+
+def test_baby_step_giant_step():
+    m = 10 ** 9 + 7
+    n_found = 0
+    for _ in range(50):
+        x, y = randint(2, 100), randint(2, 100)
+        k = baby_step_giant_step(x, y, m)
+        if k is not None:
+            n_found += 1
+            assert pow(x, k, m) == y
+    assert n_found > 0
