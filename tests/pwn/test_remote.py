@@ -41,7 +41,7 @@ class TestRemote:
             r.conn.sendall.assert_called_with(b"sample input 1")
 
             # test sendafter()
-            r.sendafter(b"sample input 2", delim=b"line2\n")
+            r.sendafter(b"line2\n", b"sample input 2")
             r.conn.sendall.assert_called_with(b"sample input 2")
             assert r.recvuntil(b"\n") == b"this is line3\n"
 

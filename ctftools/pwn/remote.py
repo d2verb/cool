@@ -54,7 +54,7 @@ class Remote:
         self.__settimeout(timeout)
         self.conn.sendall(data)
 
-    def sendafter(self, data: bytes, delim: bytes, timeout: Optional[int] = None):
+    def sendafter(self, delim: bytes, data: bytes, timeout: Optional[int] = None):
         self.recvuntil(delim, timeout=timeout)
         self.send(data, timeout=timeout)
 
