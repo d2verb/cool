@@ -3,6 +3,7 @@ from typing import BinaryIO, Dict, Optional
 
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
+from elftools.elf.sections import SymbolTableSection
 
 from ctftools.util.pack import u32
 
@@ -12,12 +13,14 @@ class ELF(ELFFile):
     file: BinaryIO
     _got: Optional[Dict[str, int]]
     _plt: Optional[Dict[str, int]]
+    _symbols: Optional[Dict[str, int]]
 
     def __init__(self, path: str):
         self.path = os.path.abspath(path)
         self.file = open(self.path, "rb")
         self._got = None
         self._plt = None
+        self._symbols = None
         super().__init__(self.file)
 
     @property
@@ -96,6 +99,23 @@ class ELF(ELFFile):
             raise NotImplementedError(
                 f"making got-plt mapping for '{machine}' is not implemented now."
             )
+
+    @property
+    def symbols(self) -> Dict[str, int]:
+        if self._symbols:
+            return self._symbols
+
+        self._symbols = {}
+
+        for section in self.iter_sections():
+            if not isinstance(section, SymbolTableSection):
+                continue
+
+            for symbol in section.iter_symbols():
+                if symbol.name and symbol.entry.st_value:
+                    self._symbols[symbol.name] = symbol.entry.st_value
+
+        return self._symbols
 
 
 def elf(path: str) -> ELF:
