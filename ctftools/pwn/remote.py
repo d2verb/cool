@@ -2,6 +2,8 @@ import socket
 import telnetlib
 from typing import Optional
 
+from ctftools.util.enc import b2s
+
 
 class Remote:
     def __init__(self, host: str, port: int, timeout: Optional[int] = None):
@@ -20,10 +22,10 @@ class Remote:
         # Telnet.interact() will call text.decode("ascci") but this will fail sometimes.
         # We just print bytes itself for avoiding UnicodeDecodeError.
         while True:
-            data = t.read_eager()
-            print(data)
-            data = input(">> ")
-            t.write(data.encode("utf8"))
+            inp = b2s(t.read_eager())
+            print(inp)
+            out = input(">> ")
+            t.write(out.encode("utf8"))
 
     def recv(self, numb: int = 4096, timeout: Optional[int] = None) -> bytes:
         self.__settimeout(self.timeout)

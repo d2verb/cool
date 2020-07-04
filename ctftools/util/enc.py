@@ -17,3 +17,7 @@ def urlenc(string: Union[str, bytes]) -> str:
 
 def urldec(string: str) -> str:
     return unquote(string)
+
+
+def b2s(bs: bytes) -> str:
+    return "".join(list(map(chr, bs)))
