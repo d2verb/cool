@@ -1,4 +1,4 @@
-from ctftools.utils import b64dec, b64enc, urldec, urlenc
+from ctftools.util.enc import b64dec, b64enc, urldec, urlenc
 
 
 def test_b64enc():
