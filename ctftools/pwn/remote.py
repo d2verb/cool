@@ -3,7 +3,7 @@ import telnetlib
 from typing import Optional
 
 
-class Tube:
+class Remote:
     def __init__(self, host: str, port: int, timeout: Optional[int] = None):
         self.host = host
         self.port = port

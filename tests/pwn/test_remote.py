@@ -1,6 +1,6 @@
 from unittest import mock
 
-from ctftools.pwn.tube import Tube
+from ctftools.pwn import Remote
 
 
 class ConnectionMock:
@@ -14,7 +14,7 @@ class ConnectionMock:
         return result
 
 
-class TestPwn:
+class TestRemote:
     def setup_method(self):
         self.conn = ConnectionMock()
         self.conn.sendall = mock.MagicMock(name="sendall")
@@ -22,7 +22,7 @@ class TestPwn:
 
     def test_recv(self):
         with mock.patch("socket.create_connection", return_value=self.conn):
-            t = Tube("example.com", 12345)
+            t = Remote("example.com", 12345)
 
             # test recvuntil()
             assert t.recvuntil(b"\n") == b"this is line1\n"
@@ -34,7 +34,7 @@ class TestPwn:
 
     def test_send(self):
         with mock.patch("socket.create_connection", return_value=self.conn):
-            t = Tube("example.com", 12345)
+            t = Remote("example.com", 12345)
 
             # test send()
             t.send(b"sample input 1")
