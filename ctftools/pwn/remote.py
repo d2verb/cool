@@ -16,7 +16,14 @@ class Remote:
     def interact(self):
         t = telnetlib.Telnet()
         t.sock = self.conn
-        t.interact()
+
+        # Telnet.interact() will call text.decode("ascci") but this will fail sometimes.
+        # We just print bytes itself for avoiding UnicodeDecodeError.
+        while True:
+            data = t.read_eager()
+            print(data)
+            data = input(">> ")
+            t.write(data.encode("utf8"))
 
     def recv(self, numb: int = 4096, timeout: Optional[int] = None) -> bytes:
         self.__settimeout(self.timeout)
