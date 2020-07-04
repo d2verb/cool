@@ -1,8 +1,10 @@
 import socket
 import telnetlib
+import time
 from typing import Optional
 
 from ctftools.util.enc import b2s
+from termcolor import colored
 
 
 class Remote:
@@ -22,10 +24,16 @@ class Remote:
         # Telnet.interact() will call text.decode("ascci") but this will fail sometimes.
         # We just print bytes itself for avoiding UnicodeDecodeError.
         while True:
-            inp = b2s(t.read_eager())
-            print(inp)
-            out = input(">> ")
-            t.write(out.encode("utf8"))
+            try:
+                time.sleep(1)
+
+                inp = b2s(t.read_very_eager())
+                print(inp, end="")
+
+                out = input(colored(">> ", "green"))
+                t.write(out.encode("utf8") + b"\n")
+            except EOFError:
+                break
 
     def recv(self, numb: int = 4096, timeout: Optional[int] = None) -> bytes:
         self.__settimeout(self.timeout)
