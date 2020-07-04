@@ -1,3 +1,3 @@
-from ctftools.pwn.remote import Remote
+from ctftools.pwn.remote import remote
 
-__all__ = ["Remote"]
+__all__ = ["remote"]

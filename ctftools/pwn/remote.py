@@ -61,3 +61,7 @@ class Remote:
             self.conn.settimeout(self.timeout)
         else:
             self.conn.settimeout(timeout)
+
+
+def remote(host: str, port: int, timeout: Optional[int] = None) -> Remote:
+    return Remote(host, port, timeout=timeout)

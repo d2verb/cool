@@ -1,6 +1,6 @@
 from unittest import mock
 
-from ctftools.pwn import Remote
+from ctftools.pwn import remote
 
 
 class ConnectionMock:
@@ -22,29 +22,29 @@ class TestRemote:
 
     def test_recv(self):
         with mock.patch("socket.create_connection", return_value=self.conn):
-            t = Remote("example.com", 12345)
+            r = remote("example.com", 12345)
 
             # test recvuntil()
-            assert t.recvuntil(b"\n") == b"this is line1\n"
-            assert t.recvuntil(b"\n", drop=True) == b"this is line2"
+            assert r.recvuntil(b"\n") == b"this is line1\n"
+            assert r.recvuntil(b"\n", drop=True) == b"this is line2"
 
             # test recv()
-            assert t.recv(5) == b"this "
-            assert t.recv() == b"is line3\nthis is line4"
+            assert r.recv(5) == b"this "
+            assert r.recv() == b"is line3\nthis is line4"
 
     def test_send(self):
         with mock.patch("socket.create_connection", return_value=self.conn):
-            t = Remote("example.com", 12345)
+            r = remote("example.com", 12345)
 
             # test send()
-            t.send(b"sample input 1")
-            t.conn.sendall.assert_called_with(b"sample input 1")
+            r.send(b"sample input 1")
+            r.conn.sendall.assert_called_with(b"sample input 1")
 
             # test sendafter()
-            t.sendafter(b"sample input 2", delim=b"line2\n")
-            t.conn.sendall.assert_called_with(b"sample input 2")
-            assert t.recvuntil(b"\n") == b"this is line3\n"
+            r.sendafter(b"sample input 2", delim=b"line2\n")
+            r.conn.sendall.assert_called_with(b"sample input 2")
+            assert r.recvuntil(b"\n") == b"this is line3\n"
 
             # test sendline()
-            t.sendline(b"sample input 3")
-            t.conn.sendall.assert_called_with(b"sample input 3\n")
+            r.sendline(b"sample input 3")
+            r.conn.sendall.assert_called_with(b"sample input 3\n")
