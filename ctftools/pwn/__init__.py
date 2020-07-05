@@ -1,4 +1,2 @@
-from ctftools.pwn.elf import elf
-from ctftools.pwn.remote import remote
-
-__all__ = ["remote", "elf"]
+from ctftools.pwn.elf import *  # noqa: F403, F401
+from ctftools.pwn.remote import *  # noqa: F403, F401

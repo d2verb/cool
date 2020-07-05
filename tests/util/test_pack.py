@@ -1,4 +1,4 @@
-from ctftools.util.pack import p16, p32, p64, u16, u32, u64
+from ctftools.util import p16, p32, p64, u16, u32, u64
 
 
 def test_p16():
