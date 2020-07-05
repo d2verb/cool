@@ -8,6 +8,8 @@ def b64enc(bs: bytes) -> bytes:
 
 
 def b64dec(bs: bytes) -> bytes:
+    if len(bs) % 4 != 0:
+        bs += b"=" * (len(bs) % 4)
     return b64decode(bs)
 
 
