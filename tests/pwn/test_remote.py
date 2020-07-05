@@ -1,50 +1,51 @@
-from unittest import mock
+import socket
 
 from ctftools.pwn import remote
 
 
-class ConnectionMock:
-    def __init__(self):
-        self.idx = 0
-        self.msg = b"this is line1\nthis is line2\nthis is line3\nthis is line4"
+def test_remote():
+    r = remote("www.example.com", 80)
 
-    def recv(self, numb: int) -> bytes:
-        result = self.msg[self.idx : self.idx + numb]
-        self.idx += numb
-        return result
+    # send request
+    r.sendline(b"GET / HTTP/1.1\r")
+    r.send(b"Host: www.example.com\r\n\r\n")
+
+    # receive status line
+    status_line = r.recvuntil(b"\r\n", drop=True)
+    assert status_line == b"HTTP/1.1 200 OK"
+
+    # receive rest of the response
+    response = r.recv()
+    assert len(response) > 0
+
+    # TODO: Web should test sendafter() but how...
+
+    r.close()
 
 
-class TestRemote:
-    def setup_method(self):
-        self.conn = ConnectionMock()
-        self.conn.sendall = mock.MagicMock(name="sendall")
-        self.conn.settimeout = mock.MagicMock(name="settimeout")
+def test_timeout():
+    # passing the timeout parameter as a method argument
+    r = remote("www.example.com", 80)
+    timed_out = False
+    try:
+        r.recvuntil(b"meme", timeout=1)
+    except socket.timeout:
+        timed_out = True
+    except Exception:
+        pass
+    finally:
+        r.close()
+    assert timed_out
 
-    def test_recv(self):
-        with mock.patch("socket.create_connection", return_value=self.conn):
-            r = remote("example.com", 12345)
-
-            # test recvuntil()
-            assert r.recvuntil(b"\n") == b"this is line1\n"
-            assert r.recvuntil(b"\n", drop=True) == b"this is line2"
-
-            # test recv()
-            assert r.recv(5) == b"this "
-            assert r.recv() == b"is line3\nthis is line4"
-
-    def test_send(self):
-        with mock.patch("socket.create_connection", return_value=self.conn):
-            r = remote("example.com", 12345)
-
-            # test send()
-            r.send(b"sample input 1")
-            r.conn.sendall.assert_called_with(b"sample input 1")
-
-            # test sendafter()
-            r.sendafter(b"line2\n", b"sample input 2")
-            r.conn.sendall.assert_called_with(b"sample input 2")
-            assert r.recvuntil(b"\n") == b"this is line3\n"
-
-            # test sendline()
-            r.sendline(b"sample input 3")
-            r.conn.sendall.assert_called_with(b"sample input 3\n")
+    # passing the timeout parameter as a constructor argument
+    r = remote("www.example.com", 80, timeout=1)
+    timed_out = False
+    try:
+        r.recvuntil(b"meme")
+    except socket.timeout:
+        timed_out = True
+    except Exception:
+        pass
+    finally:
+        r.close()
+    assert timed_out
