@@ -10,7 +10,7 @@ This is an example to solve the pwn challenge (the-library) in redpwnCTF 2020.
 
 ```python
 from ctftools.pwn import elf, remote
-from ctftools.util.pack import p64, u64
+from ctftools.util import p64, u64
 
 e = elf("./tmp/the-library")
 l = elf("./tmp/libc.so.6")
