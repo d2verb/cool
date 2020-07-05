@@ -36,7 +36,7 @@ class Remote:
                 break
 
     def recv(self, numb: int = 4096, timeout: Optional[int] = None) -> bytes:
-        self.__settimeout(self.timeout)
+        self.__settimeout(timeout)
         data = self.conn.recv(numb)
         return data
 
