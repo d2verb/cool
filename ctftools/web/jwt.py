@@ -67,7 +67,7 @@ class JwtToken:
         if alg_fun is None:
             alg_name = self.header["alg"]
             raise NotImplementedError(
-                f"MAC algorithm for '{alg_name}' is not implemented"
+                f"HMAC algorithm for '{alg_name}' is not implemented"
             )
 
         return alg_fun(**kwargs) == self.signature
