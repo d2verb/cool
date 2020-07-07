@@ -1,5 +1,5 @@
 import fire
-from ctftools.cli import Pipeline
+from cool.cli import Pipeline
 
 
 def main():

@@ -6,7 +6,7 @@ import hmac
 import json
 from typing import Callable, Optional
 
-from ctftools.util import b64dec, b64enc
+from cool.util import b64dec, b64enc
 
 
 class JwtHmacAlgorithm:

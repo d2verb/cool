@@ -1,6 +1,6 @@
 import socket
 
-from ctftools.pwn import remote
+from cool.pwn import remote
 
 
 def test_remote():

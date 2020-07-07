@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from ctftools.api.ctftime import CTFtimeApi
+from cool.api.ctftime import CTFtimeApi
 from termcolor import colored
 
 

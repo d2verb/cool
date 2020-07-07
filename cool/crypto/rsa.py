@@ -1,9 +1,9 @@
 from typing import Optional, Tuple
 
 from Crypto.PublicKey import RSA
-from gmpy2 import iroot
 
-from ctftools.crypto.number import egcd
+from cool.crypto.number import egcd
+from gmpy2 import iroot
 
 
 def export_key(n: int, e: int, d: Optional[int] = None) -> bytes:

@@ -1,4 +1,4 @@
-from ctftools.crypto.rsa import (
+from cool.crypto.rsa import (
     common_modulus_attack,
     export_key,
     import_key,

@@ -1,4 +1,4 @@
-from ctftools.crypto.classic import rot13, xorcipher
+from cool.crypto.classic import rot13, xorcipher
 
 
 def test_rot13():

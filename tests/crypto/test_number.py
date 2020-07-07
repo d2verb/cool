@@ -1,6 +1,6 @@
 from random import randint
 
-from ctftools.crypto.number import (
+from cool.crypto.number import (
     baby_step_giant_step,
     btoi,
     egcd,
@@ -8,7 +8,7 @@ from ctftools.crypto.number import (
     itob,
     miller_rabin_test,
     modinv,
-    prime_factorization
+    prime_factorization,
 )
 
 

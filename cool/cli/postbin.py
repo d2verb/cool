@@ -1,6 +1,6 @@
 import time
 
-from ctftools.api.postbin import PostBinApi, PostBinRequestNotFoundError
+from cool.api.postbin import PostBinApi, PostBinRequestNotFoundError
 from termcolor import colored
 
 

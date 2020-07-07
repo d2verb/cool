@@ -1,4 +1,4 @@
-# CTF tools for me
+# cool - CTF toolkit for me
 [![CI](https://github.com/d2verb/ctftools/workflows/CI/badge.svg)](https://github.com/d2verb/ctftools/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/d2verb/ctftools/blob/master/LICENSE)
 
@@ -6,11 +6,11 @@
 TODO
 
 ## Example
-This is an example to solve the pwn challenge (the-library) in redpwnCTF 2020.
+This is an example solver to solve the pwn challenge (the-library) in redpwnCTF 2020.
 
 ```python
-from ctftools.pwn import elf, remote
-from ctftools.util import p64, u64
+from cool.pwn import elf, remote
+from cool.util import p64, u64
 
 e = elf("./tmp/the-library")
 l = elf("./tmp/libc.so.6")

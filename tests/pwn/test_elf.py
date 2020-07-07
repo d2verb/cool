@@ -3,7 +3,7 @@ from os.path import join
 
 import pytest
 
-from ctftools.pwn import elf
+from cool.pwn import elf
 
 BINPATH = join(pathlib.Path(__file__).parent.absolute(), "testbins")
 

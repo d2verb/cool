@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 
 import requests
 
-from ctftools.api.common import ApiException
+from cool.api.common import ApiException
 
 
 class PostBinRequestNotFoundError(ApiException):

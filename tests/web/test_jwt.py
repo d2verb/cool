@@ -1,4 +1,4 @@
-from ctftools.web.jwt import JwtToken
+from cool.web.jwt import JwtToken
 
 
 def test_jwt_decode():

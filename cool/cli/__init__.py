@@ -1,5 +1,5 @@
-from ctftools.cli.ctftime import CTFtime
-from ctftools.cli.postbin import postbin
+from cool.cli.ctftime import CTFtime
+from cool.cli.postbin import postbin
 
 
 class Pipeline:
