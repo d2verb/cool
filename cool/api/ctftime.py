@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 
 import requests
 
-from cool.api.common import ApiException
+from .common import ApiException
 
 
 class CTFtimeFatalError(ApiException):

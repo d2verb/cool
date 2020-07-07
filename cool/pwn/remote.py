@@ -3,7 +3,7 @@ import telnetlib
 import time
 from typing import Optional
 
-from cool.util.enc import b2s
+from cool.util import b2s
 from termcolor import colored
 
 

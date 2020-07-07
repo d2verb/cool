@@ -5,7 +5,7 @@ from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 from elftools.elf.sections import SymbolTableSection
 
-from cool.util.pack import u32
+from cool.util import u32
 
 
 class ELF(ELFFile):
