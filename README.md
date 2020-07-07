@@ -1,6 +1,6 @@
 # cool - CTF toolkit for me
-[![CI](https://github.com/d2verb/ctftools/workflows/CI/badge.svg)](https://github.com/d2verb/ctftools/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/d2verb/ctftools/blob/master/LICENSE)
+[![CI](https://github.com/d2verb/cool/workflows/CI/badge.svg)](https://github.com/d2verb/cool/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/d2verb/cool/blob/master/LICENSE)
 
 ## How to install
 TODO
