@@ -3,11 +3,18 @@ import telnetlib
 import time
 from typing import Optional
 
-from cool.util import b2s
 from termcolor import colored
+
+from cool.util import b2s
 
 
 class Remote:
+    """Class for connecting to a remote server.
+
+    :param host: host name of the server
+    :param port: port number of the server
+    :param timeout: timeout in seconds
+    """
     def __init__(self, host: str, port: int, timeout: Optional[int] = None):
         self.host = host
         self.port = port
@@ -15,9 +22,13 @@ class Remote:
         self.conn = socket.create_connection((self.host, self.port))
 
     def close(self):
+        """Close the connection.
+        """
         self.conn.close()
 
     def interact(self):
+        """Launch the interactive shell to the server.
+        """
         t = telnetlib.Telnet()
         t.sock = self.conn
 
@@ -36,6 +47,12 @@ class Remote:
                 break
 
     def recv(self, numb: int = 4096, timeout: Optional[int] = None) -> bytes:
+        """Receive data from the server.
+
+        :param numb: maximum data size to receive
+        :param timeout: timeout in seconds
+        :return: received data
+        """
         self.__settimeout(timeout)
         data = self.conn.recv(numb)
         return data
@@ -43,6 +60,13 @@ class Remote:
     def recvuntil(
         self, delim: bytes, timeout: Optional[int] = None, drop: bool = False
     ) -> bytes:
+        """Receive data from the server until hitting the delimiter.
+
+        :param delim: the delimiter
+        :param timeout: timeout in seconds
+        :param drop: drop the delimiter or not
+        :return: received data with/without delimiter
+        """
         data = b""
         while data[-len(delim) :] != delim:
             data += self.recv(1, timeout=timeout)
@@ -51,25 +75,49 @@ class Remote:
         return data
 
     def send(self, data: bytes, timeout: Optional[int] = None):
+        """Send data to the server.
+
+        :param data: data to send
+        :param timeout: timeout in seconds
+        """
         self.__settimeout(timeout)
         self.conn.sendall(data)
 
     def sendafter(self, delim: bytes, data: bytes, timeout: Optional[int] = None):
+        """Send data to the server after receiving delimiter.
+
+        :param delim: the delimiter
+        :param data: data to send
+        :param timeout: timeout in seconds
+        """
         self.recvuntil(delim, timeout=timeout)
         self.send(data, timeout=timeout)
 
     def sendline(
         self, data: bytes, newline: bytes = b"\n", timeout: Optional[int] = None
     ):
+        """Send data with newline character.
+
+        :param data: data to send
+        :param newline: newline character
+        :param timeout: timeout in seconds
+        """
         self.send(data + newline, timeout=timeout)
 
     def sendlineafter(
         self,
-        data: bytes,
         delim: bytes,
+        data: bytes,
         newline: bytes = b"\n",
         timeout: Optional[int] = None,
     ):
+        """Send data with newline character after receiving delimiter.
+
+        :param data: data to send
+        :param delim: the delimiter
+        :param newline: newline character
+        :param timeout: timeout in seconds
+        """
         self.recvuntil(delim, timeout=timeout)
         self.sendline(data, newline=newline, timeout=timeout)
 
@@ -81,4 +129,10 @@ class Remote:
 
 
 def remote(host: str, port: int, timeout: Optional[int] = None) -> Remote:
+    """Create a remote connection the server.
+
+    :param host: host name of the server
+    :param port: port number of the server
+    :param timeout: timeout in seconds
+    """
     return Remote(host, port, timeout=timeout)

@@ -9,6 +9,10 @@ from cool.util import u32
 
 
 class ELF(ELFFile):
+    """Class for accessing information in the ELF file.
+
+    :param path: target ELF file path
+    """
     path: str
     file: BinaryIO
     _got: Optional[Dict[str, int]]
@@ -25,6 +29,8 @@ class ELF(ELFFile):
 
     @property
     def got(self) -> Dict[str, int]:
+        """Global offset table (GOT) entries.
+        """
         if self._got:
             return self._got
 
@@ -44,6 +50,8 @@ class ELF(ELFFile):
 
     @property
     def plt(self) -> Dict[str, int]:
+        """Procedure linkage table (PLT) entries.
+        """
         if self._plt:
             return self._plt
 
@@ -102,6 +110,8 @@ class ELF(ELFFile):
 
     @property
     def symbols(self) -> Dict[str, int]:
+        """Symbols and their address.
+        """
         if self._symbols:
             return self._symbols
 
@@ -119,4 +129,8 @@ class ELF(ELFFile):
 
 
 def elf(path: str) -> ELF:
+    """Open the ELF file and return its ELF class object.
+
+    :param path: target ELF file path
+    """
     return ELF(path)
