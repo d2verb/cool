@@ -15,18 +15,18 @@ class Remote:
     :param port: port number of the server
     :param timeout: timeout in seconds
     """
-    def __init__(self, host: str, port: int, timeout: Optional[int] = None):
+    def __init__(self, host: str, port: int, timeout: Optional[int] = None) -> None:
         self.host = host
         self.port = port
         self.timeout = timeout
         self.conn = socket.create_connection((self.host, self.port))
 
-    def close(self):
+    def close(self) -> None:
         """Close the connection.
         """
         self.conn.close()
 
-    def interact(self):
+    def interact(self) -> None:
         """Launch the interactive shell to the server.
         """
         t = telnetlib.Telnet()
@@ -74,7 +74,7 @@ class Remote:
             data = data[: -len(delim)]
         return data
 
-    def send(self, data: bytes, timeout: Optional[int] = None):
+    def send(self, data: bytes, timeout: Optional[int] = None) -> None:
         """Send data to the server.
 
         :param data: data to send
@@ -83,7 +83,7 @@ class Remote:
         self.__settimeout(timeout)
         self.conn.sendall(data)
 
-    def sendafter(self, delim: bytes, data: bytes, timeout: Optional[int] = None):
+    def sendafter(self, delim: bytes, data: bytes, timeout: Optional[int] = None) -> None:
         """Send data to the server after receiving delimiter.
 
         :param delim: the delimiter
@@ -95,7 +95,7 @@ class Remote:
 
     def sendline(
         self, data: bytes, newline: bytes = b"\n", timeout: Optional[int] = None
-    ):
+    ) -> None:
         """Send data with newline character.
 
         :param data: data to send
@@ -110,7 +110,7 @@ class Remote:
         data: bytes,
         newline: bytes = b"\n",
         timeout: Optional[int] = None,
-    ):
+    ) -> None:
         """Send data with newline character after receiving delimiter.
 
         :param data: data to send
@@ -121,7 +121,7 @@ class Remote:
         self.recvuntil(delim, timeout=timeout)
         self.sendline(data, newline=newline, timeout=timeout)
 
-    def __settimeout(self, timeout: Optional[int] = None):
+    def __settimeout(self, timeout: Optional[int] = None) -> None:
         if timeout is None:
             self.conn.settimeout(self.timeout)
         else:
