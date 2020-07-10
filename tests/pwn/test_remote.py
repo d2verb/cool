@@ -29,7 +29,7 @@ def test_timeout():
     timed_out = False
     try:
         r.recvuntil(b"meme", timeout=1)
-    except socket.timeout:
+    except TimeoutError:
         timed_out = True
     except Exception:
         pass
@@ -42,7 +42,7 @@ def test_timeout():
     timed_out = False
     try:
         r.recvuntil(b"meme")
-    except socket.timeout:
+    except TimeoutError:
         timed_out = True
     except Exception:
         pass

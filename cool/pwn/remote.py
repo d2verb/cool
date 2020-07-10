@@ -54,7 +54,10 @@ class Remote:
         :return: received data
         """
         self.__settimeout(timeout)
-        data = self.conn.recv(numb)
+        try:
+            data = self.conn.recv(numb)
+        except socket.timeout:
+            raise TimeoutError
         return data
 
     def recvuntil(
@@ -81,7 +84,10 @@ class Remote:
         :param timeout: timeout in seconds
         """
         self.__settimeout(timeout)
-        self.conn.sendall(data)
+        try:
+            self.conn.sendall(data)
+        except socket.timeout:
+            raise TimeoutError
 
     def sendafter(self, delim: bytes, data: bytes, timeout: Optional[int] = None) -> None:
         """Send data to the server after receiving delimiter.
