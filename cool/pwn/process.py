@@ -14,6 +14,7 @@ from cool.util import b2s
 def timelimit(timeout: Optional[int] = None):
     def sighdlr(signum, frame):
         raise TimeoutError
+
     signal.signal(signal.SIGALRM, sighdlr)
     signal.alarm(timeout if timeout else 0)
     try:
@@ -84,7 +85,9 @@ class Process:
             self.conn.stdin.write(data)  # type: ignore
             self.conn.stdin.flush()  # type: ignore
 
-    def sendafter(self, delim: bytes, data: bytes, timeout: Optional[int] = None) -> None:
+    def sendafter(
+        self, delim: bytes, data: bytes, timeout: Optional[int] = None
+    ) -> None:
         """Send data to the process after receiving delimiter.
 
         :param delim: the delimiter

@@ -15,6 +15,7 @@ class Remote:
     :param port: port number of the server
     :param timeout: timeout in seconds
     """
+
     def __init__(self, host: str, port: int, timeout: Optional[int] = None) -> None:
         self.host = host
         self.port = port
@@ -30,7 +31,9 @@ class Remote:
         """Launch the interactive shell to the server.
         """
         t = telnetlib.Telnet()
-        t.sock = self.conn
+
+        # "Telnet" HAS "sock" ATTRIBUTE!!
+        t.sock = self.conn  # type: ignore
 
         # Telnet.interact() will call text.decode("ascci") but this will fail sometimes.
         # We just print bytes itself for avoiding UnicodeDecodeError.
@@ -89,7 +92,9 @@ class Remote:
         except socket.timeout:
             raise TimeoutError
 
-    def sendafter(self, delim: bytes, data: bytes, timeout: Optional[int] = None) -> None:
+    def sendafter(
+        self, delim: bytes, data: bytes, timeout: Optional[int] = None
+    ) -> None:
         """Send data to the server after receiving delimiter.
 
         :param delim: the delimiter

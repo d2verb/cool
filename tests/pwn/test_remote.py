@@ -1,5 +1,3 @@
-import socket
-
 from cool.pwn import remote
 
 

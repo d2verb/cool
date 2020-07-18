@@ -13,6 +13,7 @@ class ELF(ELFFile):
 
     :param path: target ELF file path
     """
+
     path: str
     file: BinaryIO
     _got: Optional[Dict[str, int]]
