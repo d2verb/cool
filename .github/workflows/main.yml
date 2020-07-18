@@ -29,15 +29,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          source $HOME/.poetry/env
+          source .venv/bin/activate
           poetry install
 
       - name: Run lint
         run: |
-          source $HOME/.poetry/env
+          source .venv/bin/activate
           make lint
 
       - name: Run test
         run: |
-          source $HOME/.poetry/env
+          source .venv/bin/activate
           make test
