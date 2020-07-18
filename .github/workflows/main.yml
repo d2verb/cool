@@ -52,7 +52,7 @@ jobs:
       - name: Install system dependencies
         run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-          brew install gmp mpfr libmpc python@3.8
+          brew upgrade python@3.8
           brew unlink python
           brew link --force python@3.8
 
