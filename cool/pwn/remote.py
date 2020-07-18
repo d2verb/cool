@@ -7,8 +7,10 @@ from termcolor import colored
 
 from cool.util import b2s
 
+from .tube import Tube
 
-class Remote:
+
+class Remote(Tube):
     """Class for connecting to a remote server.
 
     :param host: host name of the server
@@ -63,23 +65,6 @@ class Remote:
             raise TimeoutError
         return data
 
-    def recvuntil(
-        self, delim: bytes, timeout: Optional[int] = None, drop: bool = False
-    ) -> bytes:
-        """Receive data from the server until hitting the delimiter.
-
-        :param delim: the delimiter
-        :param timeout: timeout in seconds
-        :param drop: drop the delimiter or not
-        :return: received data with/without delimiter
-        """
-        data = b""
-        while data[-len(delim) :] != delim:
-            data += self.recv(1, timeout=timeout)
-        if drop:
-            data = data[: -len(delim)]
-        return data
-
     def send(self, data: bytes, timeout: Optional[int] = None) -> None:
         """Send data to the server.
 
@@ -91,46 +76,6 @@ class Remote:
             self.conn.sendall(data)
         except socket.timeout:
             raise TimeoutError
-
-    def sendafter(
-        self, delim: bytes, data: bytes, timeout: Optional[int] = None
-    ) -> None:
-        """Send data to the server after receiving delimiter.
-
-        :param delim: the delimiter
-        :param data: data to send
-        :param timeout: timeout in seconds
-        """
-        self.recvuntil(delim, timeout=timeout)
-        self.send(data, timeout=timeout)
-
-    def sendline(
-        self, data: bytes, newline: bytes = b"\n", timeout: Optional[int] = None
-    ) -> None:
-        """Send data with newline character.
-
-        :param data: data to send
-        :param newline: newline character
-        :param timeout: timeout in seconds
-        """
-        self.send(data + newline, timeout=timeout)
-
-    def sendlineafter(
-        self,
-        delim: bytes,
-        data: bytes,
-        newline: bytes = b"\n",
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Send data with newline character after receiving delimiter.
-
-        :param data: data to send
-        :param delim: the delimiter
-        :param newline: newline character
-        :param timeout: timeout in seconds
-        """
-        self.recvuntil(delim, timeout=timeout)
-        self.sendline(data, newline=newline, timeout=timeout)
 
     def __settimeout(self, timeout: Optional[int] = None) -> None:
         if timeout is None:

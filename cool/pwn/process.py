@@ -9,6 +9,8 @@ from termcolor import colored
 
 from cool.util import b2s
 
+from .tube import Tube
+
 
 @contextmanager
 def timelimit(timeout: Optional[int] = None):
@@ -23,7 +25,13 @@ def timelimit(timeout: Optional[int] = None):
         signal.alarm(0)
 
 
-class Process:
+class Process(Tube):
+    """Class for interacting with program process.
+
+    :param path: the program path
+    :param timeout: timeout in seconds
+    """
+
     def __init__(self, path: str, timeout: Optional[int] = None) -> None:
         self.timeout = timeout
         self.path = os.path.abspath(path)
@@ -58,23 +66,6 @@ class Process:
         with timelimit(timeout):
             return self.conn.stdout.read1(numb)  # type: ignore
 
-    def recvuntil(
-        self, delim: bytes, timeout: Optional[int] = None, drop: bool = False
-    ) -> bytes:
-        """Receive data from the process until hitting the delimiter.
-
-        :param delim: the delimiter
-        :param timeout: timeout in seconds
-        :param drop: drop the delimiter or not
-        :return: received data with/without delimiter
-        """
-        data = b""
-        while data[-len(delim) :] != delim:
-            data += self.recv(1, timeout=timeout)
-        if drop:
-            data = data[: -len(delim)]
-        return data
-
     def send(self, data: bytes, timeout: Optional[int] = None) -> None:
         if timeout is None:
             timeout = self.timeout
@@ -85,49 +76,9 @@ class Process:
             self.conn.stdin.write(data)  # type: ignore
             self.conn.stdin.flush()  # type: ignore
 
-    def sendafter(
-        self, delim: bytes, data: bytes, timeout: Optional[int] = None
-    ) -> None:
-        """Send data to the process after receiving delimiter.
-
-        :param delim: the delimiter
-        :param data: data to send
-        :param timeout: timeout in seconds
-        """
-        self.recvuntil(delim, timeout=timeout)
-        self.send(data, timeout=timeout)
-
-    def sendline(
-        self, data: bytes, newline: bytes = b"\n", timeout: Optional[int] = None
-    ) -> None:
-        """Send data with newline character.
-
-        :param data: data to send
-        :param newline: newline character
-        :param timeout: timeout in seconds
-        """
-        self.send(data + newline, timeout=timeout)
-
-    def sendlineafter(
-        self,
-        delim: bytes,
-        data: bytes,
-        newline: bytes = b"\n",
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Send data with newline character after receiving delimiter.
-
-        :param data: data to send
-        :param delim: the delimiter
-        :param newline: newline character
-        :param timeout: timeout in seconds
-        """
-        self.recvuntil(delim, timeout=timeout)
-        self.sendline(data, newline=newline, timeout=timeout)
-
 
 def process(path: str, timeout: Optional[int] = None) -> Process:
-    """Create a connection to the process.
+    """Create a interaction for the process.
 
     :param path: the path of program
     :param timeout: timeout in seconds
