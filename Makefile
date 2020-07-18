@@ -2,8 +2,11 @@
 test:
 	pytest tests
 
-.PHONY: check
-check:
+.PHONY: fmt
+fmt:
 	black cool/* tests/*
+
+.PHONY: lint
+lint:
 	flake8 cool/* tests/*
 	mypy ./cool/* ./tests/*
