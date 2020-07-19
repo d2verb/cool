@@ -42,6 +42,11 @@ jobs:
           source .venv/bin/activate
           make test
 
+      - name: Build distribution
+        run: |
+          source .venv/bin/activate
+          poetry build
+
       - name: Upload distribution
         uses: actions/upload-artifact@v1
         with:
