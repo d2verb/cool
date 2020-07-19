@@ -4,7 +4,7 @@
 
 ## Prerequisite
 
-`cool` uses `gmpy2`, so you must install some dependencies for it. In Linux case, you can run following commands.
+`cool` uses `gmpy2`, so you must install some dependencies for it. In Linux case, just run following commands.
 
 ```shell
 $ sudo apt-get update
