@@ -44,7 +44,7 @@ jobs:
 
       - name: Build distribution
         run: |
-          source .venv/bin/activate
+          source $HOME/.poetry/env
           poetry build
 
       - name: Upload distribution
