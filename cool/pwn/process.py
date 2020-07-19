@@ -47,14 +47,14 @@ class Process(Tube):
         """
         while True:
             try:
-                time.sleep(1)
+                time.sleep(0.5)
 
                 inp = b2s(self.recv())
-                print(inp, end="")
+                print(inp)
 
                 out = input(colored(">> ", "green"))
                 self.sendline(out.encode("utf8"))
-            except EOFError:
+            except (EOFError, BrokenPipeError):
                 break
 
     def recv(self, numb: int = 4096, timeout: Optional[int] = None) -> bytes:

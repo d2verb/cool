@@ -41,14 +41,14 @@ class Remote(Tube):
         # We just print bytes itself for avoiding UnicodeDecodeError.
         while True:
             try:
-                time.sleep(1)
+                time.sleep(0.5)
 
                 inp = b2s(t.read_very_eager())
-                print(inp, end="")
+                print(inp)
 
                 out = input(colored(">> ", "green"))
                 t.write(out.encode("utf8") + b"\n")
-            except EOFError:
+            except (EOFError, BrokenPipeError):
                 break
 
     def recv(self, numb: int = 4096, timeout: Optional[int] = None) -> bytes:
