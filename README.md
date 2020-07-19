@@ -2,8 +2,23 @@
 [![CI](https://github.com/d2verb/cool/workflows/CI/badge.svg)](https://github.com/d2verb/cool/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/d2verb/cool/blob/master/LICENSE)
 
+## Prerequisite
+
+`cool` uses `gmpy2`, so you must install some dependencies for it. In Linux case, you can run following commands.
+
+```shell
+$ sudo apt-get update
+$ sudo apt-get install -y libgmp-dev libmpfr-dev libmpc-dev libgmp3-dev
+```
+
 ## How to install
-TODO
+We don't provide any convenient way to install now. You can install `cool` by downloading the artifact of GitHub Actions (named as `dist`) and using the wheel file in it.
+
+```shell
+$ unzip dist.zip
+$ pip install ./dist/cool-0.1.0-py3-none-any.whl
+```
+
 
 ## Example
 This is an example solver to solve the pwn challenge (the-library) in redpwnCTF 2020.
