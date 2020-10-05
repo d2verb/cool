@@ -1,5 +1,6 @@
 import os
-from typing import BinaryIO, Dict, Optional
+from typing import BinaryIO, Dict
+from functools import cached_property
 
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
@@ -16,27 +17,17 @@ class ELF(ELFFile):
 
     path: str
     file: BinaryIO
-    _got: Optional[Dict[str, int]]
-    _plt: Optional[Dict[str, int]]
-    _symbols: Optional[Dict[str, int]]
 
     def __init__(self, path: str):
         self.path = os.path.abspath(path)
         self.file = open(self.path, "rb")
-        self._got = None
-        self._plt = None
-        self._symbols = None
         super().__init__(self.file)
 
-    @property
+    @cached_property
     def got(self) -> Dict[str, int]:
         """Global offset table (GOT) entries.
         """
-        if self._got:
-            return self._got
-
-        self._got = {}
-
+        got = {}
         for section in self.iter_sections():
             if not isinstance(section, RelocationSection):
                 continue
@@ -45,21 +36,15 @@ class ELF(ELFFile):
 
             for rel in section.iter_relocations():
                 symbol = symtab.get_symbol(rel.entry.r_info_sym)
-                self._got[symbol.name] = rel.entry.r_offset
+                got[symbol.name] = rel.entry.r_offset
 
-        return self._got
+        return got
 
-    @property
+    @cached_property
     def plt(self) -> Dict[str, int]:
         """Procedure linkage table (PLT) entries.
         """
-        if self._plt:
-            return self._plt
-
-        self._plt = {}
-
-        got2plt = {}
-
+        plt, got2plt = {}, {}
         # make got_addr -> plt_addr mapping
         for plt_name in [".plt", ".plt.got", ".plt.sec"]:
             section = self.get_section_by_name(plt_name)
@@ -77,9 +62,9 @@ class ELF(ELFFile):
         # make got_name -> plt_addr mapping
         for got_name, got_addr in self.got.items():
             if got_addr in got2plt:
-                self._plt[got_name] = got2plt[got_addr]
+                plt[got_name] = got2plt[got_addr]
 
-        return self._plt
+        return plt
 
     def __make_got_plt_mapping(
         self, code: bytes, sh_addr: int, sh_size: int
@@ -109,24 +94,20 @@ class ELF(ELFFile):
                 f"making got-plt mapping for '{machine}' is not implemented now."
             )
 
-    @property
+    @cached_property
     def symbols(self) -> Dict[str, int]:
         """Symbols and their address.
         """
-        if self._symbols:
-            return self._symbols
-
-        self._symbols = {}
-
+        symbols = {}
         for section in self.iter_sections():
             if not isinstance(section, SymbolTableSection):
                 continue
 
             for symbol in section.iter_symbols():
                 if symbol.name and symbol.entry.st_value:
-                    self._symbols[symbol.name] = symbol.entry.st_value
+                    symbols[symbol.name] = symbol.entry.st_value
 
-        return self._symbols
+        return symbols
 
 
 def elf(path: str) -> ELF:
