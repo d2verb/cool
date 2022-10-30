@@ -1,5 +1,5 @@
 # cool - CTF toolkit for me
-[![CI](https://github.com/d2verb/cool/workflows/CI/badge.svg)](https://github.com/d2verb/cool/actions)
+[![CI](https://github.com/d2verb/cool/actions/workflows/main.yml/badge.svg)](https://github.com/d2verb/cool/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/d2verb/cool/blob/master/LICENSE)
 
 ## Prerequisite
